@@ -1,0 +1,12 @@
+<br>
+<div class="container" style="margin:auto" >
+    <div class="card-deck">
+        <div class="card" *ngFor="let post of posts" style="width: 18rem;">
+            <img class="card-img-top" [src]="post['image']"  alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title"><a routerLink="/procthread"><b>{{post['title']}}</b></a></h5>
+                <p class="card-text">{{post['description']}}</p>
+            </div>
+        </div>
+    </div> 
+</div>
