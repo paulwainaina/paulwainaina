@@ -1,0 +1,117 @@
+<br>
+<div class="container" style="margin:auto" >
+    <h5>Introduction</h5>
+    <p> Process - is a set of instructions to be executed by a computer.
+        A process can be created by calling the WINAPI kernel32.dll (CreateProcess) 
+        or through the ntdll.dll (NtCreateProcess).
+        <br>
+        Thread - is the basic unit to which the operating system allocates processor time.
+        A thread is created by calling the WINAPI kernel32.dll (CreateThread) or through the 
+        ntdll.dll (NtCreateThread) or std::thread library.
+        <br>
+        Each process is started with a single thread, often called the primary thread,
+        but can create additional threads from any of its threads. process can have one or more threads. 
+    </p>
+    <h5>Process vs Thread</h5>
+        <p>Some of the differences between the two.</p>
+        <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Process</th>
+                <th>Thread</th>
+            </tr>           
+        </thead>
+        <tbody>
+            <tr>
+                <th>1</th>
+                <td>Process does not share memory with any other process. They 
+                    can communicate using (Clipboard, COM, Data Copy, Dynamic data exchange, File Mapping, Mailslots, Pipes, Remote procedure calls, Sockets).
+                </td>
+                <td>Threads share memory and can communicate with each other.</td>
+            </tr>
+            <tr>
+                <th>2</th>
+                <td>States : new, ready, running, waiting, suspended, terminated</td>
+                <td>States : running, ready, blocked</td>
+            </tr>
+            <tr>
+                <th>3</th>
+                <td>Has it own Process control block, stack and address space.</td>
+                <td>Share common Process control block, its own thread control block, stack and common address space.</td>
+            </tr>
+        </tbody>
+        </table>
+        <img src="/assets/procthread.jpg">
+        <br>
+        <h5> Types of Thread</h5>   
+        <h6>User-Level Thread</h6>        
+            <p>The user-level threads are managed by users and the kernel is not aware of it.
+            These threads are faster to create and manage.
+            The kernel manages them as if it was a single-threaded process.
+            It is implemented using user-level libraries and not by system calls. So, no call to the operating system is made when a thread switches the context.
+            Each process has its own private thread table to keep the track of the threads.</p> 
+        <br>       
+        <h6>Kernel-Level Thread</h6>        
+            <p>The kernel knows about the thread and is supported by the OS.
+            The threads are created and implemented using system calls.
+            The thread table is not present here for each process. The kernel has a thread table to keep the track of all the threads present in the system.
+            Kernel-level threads are slower to create and manage as compared to user-level threads.</p>
+        <h5>Example of Threads</h5>
+        <pre><code>
+                #include {{ '<' }}thread{{ '>' }}
+                #include {{ '<' }}iostream{{ '>' }}
+                #include {{ '<' }}string{{ '>' }}
+                class Test {{ '{' }}
+                public:
+                    Test(std::string text) {{ '{' }}
+                        std::thread printtest(&Test::print, this,text);
+                        printtest.join();
+                    {{ '}' }}
+                    Test() {{ '{' }}
+                
+                    {{ '}' }}
+                    void display(std::string text) {{ '{' }}
+                        std::cout &lt;&lt; text &lt;&lt; std::endl;
+                    {{ '}' }}
+                private:
+                    void print(std::string text) {{ '{' }}
+                        std::cout &lt;&lt; text &lt;&lt; std::endl;
+                    {{ '}' }}
+                {{ '}' }};
+                
+                class Pass {{ '{' }}
+                public:
+                    Pass() {{ '{' }}
+                        Test t;
+                        std::thread displaypass(&Test::display, t, "Pass executed"); //You must pass the classes object as a parameter
+                        displaypass.join();
+                    {{ '}' }}
+                {{ '}' }};
+                void print() {{ '{' }}
+                    std::cout &lt;&lt; "Hello World" &lt;&lt; std::endl;
+                {{ '}' }}
+                
+                int main() {{ '{' }}
+                    //Create a thread in the main function
+                    std::thread hello(print);
+                    hello.join();  //Wait for the thread to finish executing
+                
+                    //Create a thread in a class
+                    Test test("Test passed");
+                
+                    //create a thread using a function from another class
+                    Pass pass;
+                
+                    return 0;
+                {{ '}' }}
+        </code></pre>
+    <h5>References</h5>
+    <ul>
+        <li>https://docs.microsoft.com/en-us/windows/win32/procthread/processes-and-threads</li>
+        <li>http://www.codewarrior.cn/ntdoc/winnt/ps/NtCreateProcess.htm</li>
+        <li>http://undocumented.ntinternals.net/index.html</li>
+        <li>https://docs.microsoft.com/en-us/windows/win32/ipc/interprocess-communications</li>
+        <li>https://github.com/paulwainaina/Threads.git</li>
+    </ul>
+</div>
